@@ -1,0 +1,128 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        Pos sharkPos = new Pos(0,0);
+        int size = 2;
+        int timeCount = 0;
+        int eatCount = 0;
+        int N = input.nextInt();
+
+        ArrayList<Pos> fishCanEat = new ArrayList<>();
+        ArrayList<Pos> fish_two = new ArrayList<>();
+        ArrayList<Pos> fish_three = new ArrayList<>();
+        ArrayList<Pos> fish_four = new ArrayList<>();
+        ArrayList<Pos> fish_five = new ArrayList<>();
+        ArrayList<Pos> fish_six = new ArrayList<>();
+
+        for(int i = 0 ; i < N; i ++){
+            for (int j = 0 ; j < N ; j ++){
+                int fish = input.nextInt();
+                if(fish==9){
+                    sharkPos.x = i;
+                    sharkPos.y = j;
+                }
+                else if(fish == 1){
+                    fishCanEat.add(new Pos(i,j));
+                }
+                else if(fish == 2){
+                    fish_two.add(new Pos(i,j));
+                }
+                else if(fish == 3){
+                    fish_three.add(new Pos(i,j));
+                }
+                else if(fish == 4){
+                    fish_four.add(new Pos(i,j));
+                }
+                else if(fish == 5){
+                    fish_five.add(new Pos(i,j));
+                }
+                else if(fish == 6){
+                    fish_six.add(new Pos(i,j));
+                }
+            }
+        }
+
+        while(!fishCanEat.isEmpty()){
+            for(int i = 0 ; i < fishCanEat.size(); i ++){
+                System.out.print("(" + fishCanEat.get(i).x + "," + fishCanEat.get(i).y + ")");
+            }
+
+            int minIndex = 999;
+            int minTime = 999;
+            Pos minPos = new Pos(0,0);
+
+            for(int i = 0 ; i < fishCanEat.size(); i++){
+
+                int fishX = fishCanEat.get(i).x;
+                int fishY = fishCanEat.get(i).y;
+
+                int thisTime = Math.abs(fishX-sharkPos.x) + Math.abs(fishY-sharkPos.y);
+
+                if(thisTime < minTime){
+                    minIndex = i;
+                    minTime = thisTime;
+                    minPos.x = fishX;
+                    minPos.y = fishY;
+                }
+                else if(thisTime == minTime){
+                    if(minPos.x > fishX ){
+                        minIndex = i;
+                        minTime = thisTime;
+                        minPos.x = fishX;
+                        minPos.y = fishY;
+                    }
+                    else if(minPos.x == fishX){
+                        if(minPos.y > fishY){
+                            minIndex = i;
+                            minTime = thisTime;
+                            minPos.x = fishX;
+                            minPos.y = fishY;
+                        }
+                    }
+                }
+            }
+            timeCount = timeCount + minTime;
+            sharkPos.x = minPos.x;
+            sharkPos.y = minPos.y;
+            eatCount ++;
+
+            System.out.println();
+
+            if (eatCount == size && size<7) {
+                eatCount = 0;
+                size++;
+                if (size == 3) {
+                    fishCanEat.addAll(fish_two);
+                } else if (size == 4) {
+                    fishCanEat.addAll(fish_three);
+                } else if (size == 5) {
+                    fishCanEat.addAll(fish_four);
+                } else if (size == 6) {
+                    fishCanEat.addAll(fish_five);
+                } else if (size == 7) {
+                    fishCanEat.addAll(fish_six);
+                }
+            }
+
+            fishCanEat.remove(minIndex);
+
+        }
+
+        System.out.print(timeCount);
+
+    }
+}
+
+class Pos{
+    int x;
+    int y;
+    Pos(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+}
