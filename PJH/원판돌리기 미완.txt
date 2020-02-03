@@ -1,0 +1,305 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args){
+        Scanner input = new Scanner(System.in);
+        int N = input.nextInt();
+        int M = input.nextInt();
+        int T = input.nextInt();
+
+        int[][] map = new int[M][N];
+        int[][] roll = new int[T][3];
+
+        for(int i = 0; i < M; i++){
+            for(int j = 0 ; j < N; j++){
+                map[i][j] = input.nextInt();
+            }
+        }
+
+        for(int i = 0 ; i < T; i++){
+            for(int j = 0 ; j<3; j++){
+                roll[i][j] = input.nextInt();
+            }
+        }
+
+        for(int i = 0 ; i < T; i ++){
+            for(int k = 0 ; k < N; k ++){
+                if((k+1)%roll[i][0]==0){
+                    int[] r_array = rotate(map[k],roll[i][1],roll[i][2]);
+                    for(int j = 0 ; j < M ; j ++){
+                        map[k][j] = r_array[j];
+                    }
+                }
+            }
+
+            for(int j = 0; j< N; j++){
+                for(int k = 0; k < M ; k++){
+                    System.out.print(map[j][k]);
+                }
+                System.out.println();
+            }
+
+
+            int[][] map_array = check(map,N,M);
+            for(int j = 0 ; j < N ; j++){
+                for(int k = 0 ; k < M; k++){
+                    map[j][k] = map_array[j][k];
+                }
+            }
+
+        }
+
+        int total = 0;
+        for(int i = 0 ; i < N; i ++){
+            for(int j = 0 ; j < M; j++){
+                total = total + map[i][j];
+                System.out.print(map[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.print(total);
+    }
+
+    static int[] rotate(int[] x, int d, int k){
+        int size = x.length;
+        int[] array = new int[size];
+
+        if(d == 0){ // 시계방향
+            for(int i = 0; i<size; i++){
+                if(i+k<size){
+                    array[i+k]= x[i];
+                }
+                else if(i+k>=size){
+                    array[i+k-size] = x[i];
+                }
+            }
+        }
+        else if(d == 1){ // 반시계방향
+            for(int i = 0; i<size; i++){
+                if(i-k>=0){
+                    array[i-k]= x[i];
+                }
+                else if(i-k<0){
+                    array[i-k+size] = x[i];
+                }
+            }
+        }
+        return array;
+    }
+
+    static int[][] check(int[][] map, int N, int M){
+        int [][] array = new int[N][M];
+        int flag = 0; // 0 == 인접X , 1 == 인접O
+
+        for(int i = 0 ; i < N; i ++){
+            for(int j = 0 ; j < M ; j++){
+                array[i][j] = map[i][j];
+            }
+        }
+
+        for(int i = 0 ; i < N; i ++){
+            for(int j = 0 ; j < M ; j++){
+                if(j == 0 && map[i][j]!=0){
+                   if(i == 0){
+                       if(map[i][j]==map[i+1][j]){
+                           array[i][j] = 0;
+                           array[i+1][j] =0;
+                           flag = 1;
+                       }
+                       if(map[i][j]==map[i][M-1]){
+                           array[i][j] = 0;
+                           array[i][M-1] =0;
+                           flag= 1;
+                       }
+                       if(map[i][j]==map[i][j+1]){
+                           array[i][j] = 0;
+                           array[i][j+1] =0;
+                           flag =1;
+                       }
+                   }
+                   else if(i == N-1){
+                       if(map[i][j]==map[i-1][j]){
+                           array[i][j] = 0;
+                           array[i-1][j] =0;
+                           flag = 1;
+                       }
+                       if(map[i][j]==map[i][M-1]){
+                           array[i][j] = 0;
+                           array[i][M-1] =0;
+                           flag = 1;
+                       }
+                       if(map[i][j]==map[i][j+1]){
+                           array[i][j] = 0;
+                           array[i][j+1] =0;
+                           flag = 1;
+                       }
+                   }
+                   else{
+                       if(map[i][j]==map[i+1][j]){
+                           array[i][j] = 0;
+                           array[i+1][j] =0;
+                           flag = 1;
+                       }
+                       if(map[i][j]==map[i-1][j]){
+                           array[i][j] = 0;
+                           array[i-1][j] =0;
+                           flag = 1;
+                       }
+                       if(map[i][j]==map[i][M-1]){
+                           array[i][j] = 0;
+                           array[i][M-1] =0;
+                           flag = 1;
+                       }
+                       if(map[i][j]==map[i][j+1]){
+                           array[i][j] = 0;
+                           array[i][j+1] =0;
+                           flag = 1;
+                       }
+                   }
+                }
+                else if(j == M-1 && map[i][j]!=0){
+                    if(i == 0){
+                        if(map[i][j]==map[i+1][j]){
+                            array[i][j] = 0;
+                            array[i+1][j] =0;
+                            flag = 1;
+                        }
+                        if(map[i][j]==map[i][0]){
+                            array[i][j] = 0;
+                            array[i][0] =0;
+                            flag = 1;
+                        }
+                        if(map[i][j]==map[i][j-1]){
+                            array[i][j] = 0;
+                            array[i][j-1] =0;
+                            flag =1;
+                        }
+                    }
+                    else if(i == N-1){
+                        if(map[i][j]==map[i-1][j]){
+                            array[i][j] = 0;
+                            array[i-1][j] =0;
+                            flag = 1;
+                        }
+                        if(map[i][j]==map[i][0]){
+                            array[i][j] = 0;
+                            array[i][0] =0;
+                            flag = 1;
+                        }
+                        if(map[i][j]==map[i][j-1]){
+                            array[i][j] = 0;
+                            array[i][j-1] =0;
+                            flag = 1;
+                        }
+                    }
+                    else{
+                        if(map[i][j]==map[i+1][j]){
+                            array[i][j] = 0;
+                            array[i+1][j] =0;
+                            flag =1 ;
+                        }
+                        if(map[i][j]==map[i-1][j]){
+                            array[i][j] = 0;
+                            array[i-1][j] =0;
+                            flag =1;
+                        }
+                        if(map[i][j]==map[i][0]){
+                            array[i][j] = 0;
+                            array[i][0] =0;
+                            flag =1;
+                        }
+                        if(map[i][j]==map[i][j-1]){
+                            array[i][j] = 0;
+                            array[i][j-1] =0;
+                            flag =1;
+                        }
+                    }
+                }
+                else if(i == 0 && map[i][j]!=0){
+                    if(map[i][j]==map[i+1][j]){
+                        array[i][j] = 0;
+                        array[i+1][j] =0;
+                        flag = 1;
+                    }
+                    if(map[i][j]==map[i][j+1]){
+                        array[i][j] = 0;
+                        array[i][j+1] =0;
+                        flag = 1;
+                    }
+                    if(map[i][j]==map[i][j-1]){
+                        array[i][j] = 0;
+                        array[i][j-1] =0;
+                        flag = 1;
+                    }
+                }
+                else if(i == N-1 && map[i][j]!=0){
+                    if(map[i][j]==map[i-1][j]){
+                        array[i][j] = 0;
+                        array[i-1][j] =0;
+                        flag = 1;
+                    }
+                    if(map[i][j]==map[i][j+1]){
+                        array[i][j] = 0;
+                        array[i][j+1] =0;
+                        flag = 1;
+                    }
+                    if(map[i][j]==map[i][j-1]){
+                        array[i][j] = 0;
+                        array[i][j-1] =0;
+                        flag = 1;
+                    }
+                }
+                else if(map[i][j]!=0){
+                    if(map[i][j]==map[i+1][j]){
+                        array[i][j] = 0;
+                        array[i+1][j] =0;
+                        flag = 1;
+                    }
+                    if(map[i][j]==map[i-1][j]){
+                        array[i][j] = 0;
+                        array[i-1][j] =0;
+                        flag = 1;
+                    }
+                    if(map[i][j]==map[i][j+1]){
+                        array[i][j] = 0;
+                        array[i][j+1] =0;
+                        flag = 1;
+                    }
+                    if(map[i][j]==map[i][j-1]){
+                        array[i][j] = 0;
+                        array[i][j-1] =0;
+                        flag = 1;
+                    }
+                }
+            }
+        }
+
+        if(flag == 0){
+            double total = 0;
+            int count = 0;
+            double avg = 0;
+            for(int i = 0 ; i < N; i++){
+                for(int j = 0 ; j < M; j ++){
+                    if(map[i][j]!=0) {
+                        total = total + (double)map[i][j];
+                        count++;
+                    }
+                }
+            }
+            avg = total / count;
+            for(int i = 0 ; i < N; i++){
+                for(int j = 0 ; j < M; j ++){
+                    if((double)map[i][j]>avg) {
+                        array[i][j] = map[i][j]-1;
+                    }
+                    if((double)map[i][j]<avg){
+                        array[i][j] = map[i][j]+1;
+                    }
+                }
+            }
+        }
+
+        return array;
+    }
+}
